@@ -1,0 +1,6 @@
+Einige Notizen und Programmbeispiele eines Programmierkurses
+
+Build:
+
+$ waf configure
+$ waf build

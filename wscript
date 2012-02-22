@@ -13,6 +13,7 @@ from subprocess import PIPE, check_call, Popen, CalledProcessError
 def options(opt):
     opt.load('compiler_c')
     opt.load('gnu_dirs')
+    opt.load('waf_unit_test')
 
 def configure(conf):
     conf.load('compiler_c')
@@ -26,22 +27,24 @@ def configure(conf):
         conf.check_library(test_exec=False)
 
     conf.check_cc(lib='m', cflags='-Wall',
-                  uselib_store='M', mandatory=False)
-    conf.check_large_file(mandatory=False)
-    conf.check_inline()
-    conf.check_endianness()
+                  uselib_store='M', mandatory=True)
+
+    conf.check_cc(lib='check', cflags='-Wall',
+                  uselib_store='check', mandatory=False)
 
     conf.multicheck({'header_name':'stdio.h'},
                     {'header_name':'unistd.h'},
                     {'header_name':'stdlib.h'},
                     msg='Checking for standard headers',
-                    mandatory=False)
+                    mandatory=True)
 
-    conf.write_config_header('config.h')
+    conf.load('waf_unit_test')
 
 
 def build(bld):
-    bld.recurse('src')
+    bld.recurse('src tests')
+    from waflib.Tools import waf_unit_test
+    bld.add_post_fun(waf_unit_test.summary)
 
 
 def dist(ctx):

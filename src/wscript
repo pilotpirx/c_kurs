@@ -1,0 +1,2 @@
+def build(bld):
+    bld.objects(source="heap.c", target="heap")

@@ -39,6 +39,48 @@ START_TEST (test_heap_grow)
 END_TEST
 
 
+START_TEST (test_heap_insert)
+{
+    double data = 5;
+
+    Heap *heap = heap_create(0);
+
+    heap_insert(heap, 5, &data);
+    fail_unless(heap->nodes[0].key == 5);
+    fail_unless(heap->size == 1);
+
+    heap_insert(heap, 4, &data);
+    fail_unless(heap->nodes[0].key == 4);
+    fail_unless(heap->nodes[1].key == 5);
+    fail_unless(heap->size == 2);
+
+    heap_insert(heap, 1, &data);
+    fail_unless(heap->nodes[0].key == 1);
+    fail_unless(heap->nodes[1].key == 5);
+    fail_unless(heap->nodes[2].key == 4);
+
+    heap_insert(heap, -1, &data);
+    fail_unless(heap->nodes[0].key == -1);
+    fail_unless(heap->nodes[1].key == 1);
+    fail_unless(heap->nodes[2].key == 4);
+    fail_unless(heap->nodes[3].key == 5);
+
+    heap_destroy(heap);
+
+    heap = heap_create(0);
+    double keys[7] = {0.1, -1.5, 5, 100, -1.6, 0, 5};
+    int i;
+    for (i = 0; i < 7; i++) {
+        heap_insert(heap, keys[i], (void*) i); /* misuse of the data field */
+    }
+
+    fail_unless(heap->size == 7);
+    fail_unless((int) heap_find_min(heap) == 4);
+
+}
+END_TEST
+
+
 Suite *
 money_suite (void)
 {
@@ -49,6 +91,7 @@ money_suite (void)
 
   tcase_add_test (tc_core, test_heap_create);
   tcase_add_test (tc_core, test_heap_grow);
+  tcase_add_test (tc_core, test_heap_insert);
 
   suite_add_tcase (s, tc_core);
 

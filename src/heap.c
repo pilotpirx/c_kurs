@@ -86,7 +86,7 @@ void heapify_down(Heap *heap)
 }
 
 
-Heap* create_heap(int size)
+Heap* heap_create(int size)
 {
     Heap *heap = malloc(sizeof(Heap));
 
@@ -108,7 +108,7 @@ Heap* create_heap(int size)
 }
 
 
-void destroy_heap(Heap *heap)
+void heap_destroy(Heap *heap)
 {
     if (heap->nodes) {
         free(heap->nodes);
@@ -120,7 +120,7 @@ void destroy_heap(Heap *heap)
 }
 
 
-void* find_min(Heap *heap)
+void* heap_find_min(Heap *heap)
 {
     if (heap->size == 0) {
         return NULL;
@@ -130,7 +130,7 @@ void* find_min(Heap *heap)
 }
 
 
-void delete_min(Heap *heap)
+void heap_delete_min(Heap *heap)
 {
     if (heap->size == 0) {
         return;
@@ -144,7 +144,7 @@ void delete_min(Heap *heap)
 }
 
 
-int insert(Heap *heap, double key, void *data)
+int heap_insert(Heap *heap, double key, void *data)
 {
     int failure = 0;
 
@@ -163,7 +163,7 @@ int insert(Heap *heap, double key, void *data)
 }
 
 
-void print_heap(Heap *heap)
+void heap_print(Heap *heap)
 {
     int i, j, h, w, t;
     int step_size;

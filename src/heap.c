@@ -53,21 +53,21 @@ void heapify_down(Heap *heap)
 
     i = 0;
     while (1) {
-        if (2 * i >= heap->size) {
+        if (2 * i  + 1>= heap->size) {
             break;
         }
 
-        if (2 * i + 1 >= heap->size) {
-            key_left = nodes[2 * i].key;
+        if (2 * i + 2 >= heap->size) {
+            key_left = nodes[2 * i + 1].key;
             if (key > key_left) {
-                heap_swap(heap, i, 2 * i);
-                i = 2 * i;
-                break;
+                heap_swap(heap, i, 2 * i + 1);
+                i = 2 * i + 1;
             }
+            break;
         }
 
-        key_right = nodes[2 * i + 1].key;
-        key_left = nodes[2 * i].key;
+        key_right = nodes[2 * i + 2].key;
+        key_left = nodes[2 * i + 1].key;
         key = nodes[i].key;
 
         if (key <= MIN(key_right, key_left)) {
@@ -75,12 +75,12 @@ void heapify_down(Heap *heap)
         }
 
         if (key_right <= key_left) {
-            heap_swap(heap, i, 2 * i + 1);
-            i = 2 * i + 1;
+            heap_swap(heap, i, 2 * i + 2);
+            i = 2 * i + 2;
         }
         else {
-            heap_swap(heap, i, 2 * i);
-            i = 2 * i;
+            heap_swap(heap, i, 2 * i + 1);
+            i = 2 * i + 1;
         }
     }
 }

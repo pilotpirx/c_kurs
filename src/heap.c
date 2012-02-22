@@ -170,16 +170,6 @@ void heap_print(Heap *heap)
     unsigned int height = ceil(log2((double) heap->size + 1));
     unsigned int width = 4 * pow(2, height);
 
-    char **out = malloc(height * sizeof(char*));
-
-    for (i = 0; i < height; i++) {
-        out[i] = malloc((width + 1) * sizeof(char));
-        for (w = 0; w < width; w++) {
-            out[i][w] = ' ';
-        }
-        out[i][width] = '\0';
-    }
-
     i = 0;
     step_size = width;
     for (h = 0; h < height; h++) {
@@ -188,10 +178,10 @@ void heap_print(Heap *heap)
                     printf(" ");
                 }
                 printf("%1.0f", heap->nodes[i].key);
+                i++;
                 for(t = 0; t < step_size / 2 - 1; t++) {
                     printf(" ");
                 }
-                i++;
                 if (i >= heap->size) {
                     break;
                 }

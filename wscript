@@ -56,14 +56,21 @@ def configure(conf):
 
     conf.load('waf_unit_test')
 
+    conf.env.append_value('CFLAGS', '-O2')
+
     if conf.options.debug:
         debug_compile_flags = ['-g', '-O0', '-Wall', '-Wextra']
         conf.env.append_value('CFLAGS', debug_compile_flags)
+        conf.define('DEBUG', 1)
+    else:
+        conf.define('DEBUG', 0)
 
 
     if conf.options.profile:
-        conf.env.append_value('CPPFLAGS', '-pg')
+        conf.env.append_value('CFLAGS', '-pg', '-O0')
         conf.env.append_value('LINKFLAGS', '-pg')
+
+    conf.write_config_header("config.h")
 
 
 

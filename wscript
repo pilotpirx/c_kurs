@@ -12,8 +12,23 @@ from subprocess import PIPE, check_call, Popen, CalledProcessError
 
 def options(opt):
     opt.load('compiler_c')
-    opt.load('gnu_dirs')
     opt.load('waf_unit_test')
+    opt.add_option('--debug', action='store_true',
+                   default=False, dest='debug',
+                   help='Debug mode')
+
+    opt.add_option('--debug',
+                   action='store_true',
+                   default=False,
+                   help='Build debug variant',
+                   dest='debug')
+
+    opt.add_option('--profile',
+                   action='store_true',
+                   default=False,
+                   help='Enable profiling',
+                   dest='profile')
+
 
 def configure(conf):
     conf.load('compiler_c')
@@ -30,7 +45,8 @@ def configure(conf):
                   uselib_store='M', mandatory=True)
 
     conf.check_cc(lib='check', cflags='-Wall',
-                  uselib_store='check', mandatory=False)
+                  uselib_store='check', mandatory=False,
+                  errmsg="could not find check. Unit tests disabled")
 
     conf.multicheck({'header_name':'stdio.h'},
                     {'header_name':'unistd.h'},
@@ -39,6 +55,16 @@ def configure(conf):
                     mandatory=True)
 
     conf.load('waf_unit_test')
+
+    if conf.options.debug:
+        debug_compile_flags = ['-g', '-O0', '-Wall', '-Wextra']
+        conf.env.append_value('CFLAGS', debug_compile_flags)
+
+
+    if conf.options.profile:
+        conf.env.append_value('CPPFLAGS', '-pg')
+        conf.env.append_value('LINKFLAGS', '-pg')
+
 
 
 def build(bld):

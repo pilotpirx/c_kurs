@@ -1,6 +1,7 @@
 #include "heap.h"
 #include <stdio.h>
 #include <check.h>
+#include <stdlib.h>
 
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
@@ -81,6 +82,31 @@ START_TEST (test_heap_insert)
 END_TEST
 
 
+START_TEST (test_heap_find_min)
+{
+    Heap *heap = heap_create(0);
+    double data[50];
+    double min = 1;
+    int i;
+
+    srandom(42);
+
+    for (i = 0; i < 50; i++) {
+        data[i] = random();
+        if (data[i] < min) {
+            min = data[i];
+        }
+    }
+
+    for (i = 0; i < 50; i++) {
+        heap_insert(heap, data[i], data + i);
+    }
+
+    fail_unless(*(double *)heap_find_min(heap) != min);
+}
+END_TEST
+
+
 Suite *
 money_suite (void)
 {
@@ -92,6 +118,7 @@ money_suite (void)
   tcase_add_test (tc_core, test_heap_create);
   tcase_add_test (tc_core, test_heap_grow);
   tcase_add_test (tc_core, test_heap_insert);
+  tcase_add_test (tc_core, test_heap_find_min);
 
   suite_add_tcase (s, tc_core);
 

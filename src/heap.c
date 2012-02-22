@@ -174,17 +174,17 @@ void heap_print(Heap *heap)
     step_size = width;
     for (h = 0; h < height; h++) {
         for (w = 0; w < width / step_size; w++) {
-                for(t = 0; t < step_size / 2; t++) {
-                    printf(" ");
-                }
-                printf("%1.0f", heap->nodes[i].key);
-                i++;
-                for(t = 0; t < step_size / 2 - 1; t++) {
-                    printf(" ");
-                }
-                if (i >= heap->size) {
-                    break;
-                }
+            for(t = 0; t < step_size / 2; t++) {
+                printf(" ");
+            }
+            printf("%1.0f", heap->nodes[i].key);
+            i++;
+            for(t = 0; t < step_size / 2 - 1; t++) {
+                printf(" ");
+            }
+            if (i >= heap->size) {
+                break;
+            }
         }
         printf("\n");
         step_size /= 2;

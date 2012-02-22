@@ -71,11 +71,11 @@ START_TEST (test_heap_insert)
     double keys[7] = {0.1, -1.5, 5, 100, -1.6, 0, 5};
     int i;
     for (i = 0; i < 7; i++) {
-        heap_insert(heap, keys[i], (void*) i); /* misuse of the data field */
+        heap_insert(heap, keys[i], keys + i);
     }
 
     fail_unless(heap->size == 7);
-    fail_unless((int) heap_find_min(heap) == 4);
+    fail_unless(*(double *) heap_find_min(heap) == -1.6);
 
 }
 END_TEST

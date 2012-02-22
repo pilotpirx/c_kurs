@@ -45,7 +45,7 @@ void heapify_up(Heap *heap)
 
 void heapify_down(Heap *heap)
 {
-    int i;
+    unsigned int i;
     HeapNode *nodes = heap->nodes;
     double key_right;
     double key_left;
@@ -165,10 +165,10 @@ int heap_insert(Heap *heap, double key, void *data)
 
 void heap_print(Heap *heap)
 {
-    int i, j, h, w, t;
-    int step_size;
-    int height = ceil(log2((double) heap->size + 1));
-    int width = 4 * pow(2, height);
+    unsigned int i, h, w, t;
+    unsigned int step_size;
+    unsigned int height = ceil(log2((double) heap->size + 1));
+    unsigned int width = 4 * pow(2, height);
 
     char **out = malloc(height * sizeof(char*));
 

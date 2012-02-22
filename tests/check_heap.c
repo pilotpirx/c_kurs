@@ -1,7 +1,8 @@
-#include "heap.h"
 #include <stdio.h>
 #include <check.h>
 #include <stdlib.h>
+
+#include "heap.h"
 
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
@@ -85,8 +86,8 @@ END_TEST
 START_TEST (test_heap_find_min)
 {
     Heap *heap = heap_create(0);
-    double data[50];
-    double min = 1;
+    long int data[50];
+    long int min = RAND_MAX;
     int i;
 
     srandom(42);
@@ -107,6 +108,51 @@ START_TEST (test_heap_find_min)
 END_TEST
 
 
+int num_cmp(const void *arg1, const void *arg2)
+{
+    long int a = * (long int *) arg1;
+    long int b = * (long int *) arg2;
+    if (a == b) {
+        return 0;
+    }
+    if (a > b) {
+        return 1;
+    }
+    return -1;
+}
+
+#define N 100
+
+START_TEST (test_heap_delete_min)
+{
+    Heap *heap = heap_create(0);
+    long int data[N];
+    long int data_copy[N];
+    long int tmp;
+    int i;
+
+    srandom(84);
+
+    for (i = 0; i < N; i++) {
+        data[i] = random();
+        data_copy[i] = data[i];
+    }
+
+    for (i = 0; i < N; i++) {
+        heap_insert(heap, data[i], data + i);
+    }
+
+    qsort(data_copy, N, sizeof(long int), num_cmp);
+
+    for (i = 0; i < N; i++) {
+        tmp = * (long int *) heap_find_min(heap);
+        fail_unless(tmp == data_copy[i]);
+        heap_delete_min(heap);
+    }
+}
+END_TEST
+
+
 Suite *
 money_suite (void)
 {
@@ -119,6 +165,7 @@ money_suite (void)
   tcase_add_test (tc_core, test_heap_grow);
   tcase_add_test (tc_core, test_heap_insert);
   tcase_add_test (tc_core, test_heap_find_min);
+  tcase_add_test (tc_core, test_heap_delete_min);
 
   suite_add_tcase (s, tc_core);
 
